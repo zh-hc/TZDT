@@ -1,12 +1,8 @@
-import React from 'react';
-import Search from './components/Search';
+import './App.css';
 
 function App() {
   return (
-    <div>
-      <h1>搜索系统</h1>
-      <Search />
-    </div>
+    <div className="App"></div>
   );
 }
 
