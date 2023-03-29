@@ -4,6 +4,9 @@ import 'antd/dist/reset.css';
 import { Input, List, message, Button } from 'antd';
 import axios from 'axios';
 
+// 本地运行
+const API_URL = 'http://localhost:3001';
+
 class App extends React.Component {
   state = {
     keyword: '',
@@ -28,7 +31,7 @@ class App extends React.Component {
 
     this.setState({ searching: true });
     axios
-      .get(`http://localhost:3001/search?keyword=${this.state.keyword}`)
+      .get(`${API_URL}/search?keyword=${this.state.keyword}`)
       .then((res) => {
         this.setState({ data: res.data });
         if (res.data.length > 9) {
@@ -58,7 +61,7 @@ class App extends React.Component {
     this.setState({ fetching: true });
   
     axios
-      .get(`http://localhost:3001/random`)
+      .get(`${API_URL}/random`)
       .then((res) => {
         this.setState({ data: res.data });
       })
