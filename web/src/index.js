@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; // 引入useEffect和useRef
 import ReactDOM from 'react-dom';
 import 'antd/dist/reset.css';
 import { Input, List, message } from 'antd';
@@ -12,6 +12,8 @@ function App() {
   const [data, setData] = useState([]);
   const [searching, setSearching] = useState(false);
   const [fetching, setFetching] = useState(false);
+  const [highlightedData, setHighlightedData] = useState([]); // 新增highlightedData用于存储加粗标红后的数据
+  const prevKeywordRef = useRef(''); // 新增prevKeywordRef用于存储上一次搜索关键词
 
   const handleInputChange = (e) => {
     setKeyword(e.target.value);
@@ -34,6 +36,11 @@ function App() {
       .get(`${API_URL}/search?keyword=${keyword}`)
       .then((res) => {
         setData(res.data);
+        const highlightedData = res.data.map((item) => ({ // 对搜索结果进行加粗标红处理
+          question: highlightKeywords(item.question),
+          answer: highlightKeywords(item.answer),
+        }));
+        setHighlightedData(highlightedData);
         if (res.data.length > 9) {
           message.warning('当前结果过多，可以增加搜索字数，以缩小范围');
         } else if (res.data.length === 0) {
@@ -42,6 +49,7 @@ function App() {
       })
       .catch((err) => console.error(err.message))
       .finally(() => {
+        prevKeywordRef.current = keyword;
         setKeyword('');
         setTimeout(() => setSearching(false), 5000);
       });
@@ -57,15 +65,26 @@ function App() {
 
     axios
       .get(`${API_URL}/random`)
-      .then((res) => setData(res.data))
+      .then((res) => {
+        const highlightedData = res.data.map((item) => ({ // 对搜索结果进行加粗标红处理
+          question: highlightKeywords(item.question),
+          answer: highlightKeywords(item.answer),
+        }));
+        setHighlightedData(highlightedData);
+        setData(res.data);
+      })
       .catch((err) => console.error(err.message))
       .finally(() => setTimeout(() => setFetching(false), 5000));
   };
 
   const highlightKeywords = (text) => {
-    const regex = new RegExp(`(${keyword})`, 'gi');
-    return text.replace(regex, '<strong>$1</strong>');
+    const regex = new RegExp(`(${prevKeywordRef.current || keyword})`, 'gi'); // 修改正则表达式，优先使用上一次搜索关键词进行加粗标红
+    return text.replace(regex, '<strong style="color:red">$1</strong>'); // 修改加粗标红样式
   };
+
+  useEffect(() => { // 在每次渲染之后更新prevKeywordRef.current
+    prevKeywordRef.current = keyword;
+  });
 
   return (
     <div style={{ padding: '24px' }}>
@@ -80,24 +99,15 @@ function App() {
       <List
         style={{ marginTop: '24px' }}
         bordered
-        dataSource={data}
+        dataSource={highlightedData} // 使用highlightedData替代data
         renderItem={(item) => (
           <List.Item>
             <List.Item.Meta
               title={
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: highlightKeywords(item.question),
-                  }}
-                />
+                <div dangerouslySetInnerHTML={{ __html: item.question }} />
               }
               description={
-                <div
-                  style={{ color: 'blue', fontWeight: 'bold' }}
-                  dangerouslySetInnerHTML={{
-                    __html: `答案：${highlightKeywords(item.answer)}`,
-                  }}
-                />
+                <div style={{ color: 'blue', fontWeight: 'bold' }} dangerouslySetInnerHTML={{ __html: `答案：${item.answer}` }} />
               }
             />
           </List.Item>
