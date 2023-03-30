@@ -101,10 +101,31 @@ function App() {
           <List.Item>
             <List.Item.Meta
               title={
-                <div dangerouslySetInnerHTML={{ __html: item.question }} />
+                <div style={{ display: 'flex', alignItems: 'start', flexWrap: 'wrap' }}>
+                  <div style={{ fontWeight: 'bold', flexShrink: 0, marginRight: '8px' }}>题目：</div>
+                  <div style={{ flex: 1, minWidth: 0 }} dangerouslySetInnerHTML={{ __html: item.question.split('|')[0].replace(/\s/g, '_') }} />
+                </div>
               }
               description={
-                <div style={{ color: 'blue', fontWeight: 'bold' }} dangerouslySetInnerHTML={{ __html: `答案：${item.answer}` }} />
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ display: 'flex', alignItems: 'start', flexWrap: 'wrap' }}>
+                    <div style={{ fontWeight: 'bold', flexShrink: 0, marginRight: '8px' }}>选项：</div>
+                    <div style={{ color: 'blue', flex: 1 }}>
+                      <div style={{ marginLeft: '16px', marginBottom: '8px' }}>
+                        {item.question.split('|').slice(1).map((option, index) => (
+                          <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '4px', minWidth: 0 }}>
+                            <div style={{ width: '20px', textAlign: 'center', flexShrink: 0 }}>{`${String.fromCharCode(65 + index)}.`}</div>
+                            <div style={{ flex: 1, minWidth: 0 }} dangerouslySetInnerHTML={{ __html: option }} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'start', flexWrap: 'wrap' }}>
+                    <div style={{ fontWeight: 'bold', flexShrink: 0, marginRight: '8px' }}>答案：</div>
+                    <div style={{ color: 'blue', fontWeight: 'bold', flex: 1, minWidth: 0 }} dangerouslySetInnerHTML={{ __html: item.answer }} />
+                  </div>
+                </div>
               }
             />
           </List.Item>
