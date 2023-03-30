@@ -46,6 +46,7 @@ class App extends React.Component {
         console.error(err.message);
       })
       .finally(() => {
+        this.setState({ keyword: '' });
         setTimeout(() => {
           this.setState({ searching: false });
         }, 5000);
