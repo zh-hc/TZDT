@@ -9,7 +9,6 @@ const API_URL = 'http://localhost:3001';
 
 function App() {
   const [keyword, setKeyword] = useState('');
-  const [data, setData] = useState([]);
   const [searching, setSearching] = useState(false);
   const [fetching, setFetching] = useState(false);
   const [highlightedData, setHighlightedData] = useState([]); // 新增highlightedData用于存储加粗标红后的数据
@@ -35,7 +34,6 @@ function App() {
     axios
       .get(`${API_URL}/search?keyword=${keyword}`)
       .then((res) => {
-        setData(res.data);
         const highlightedData = res.data.map((item) => ({ // 对搜索结果进行加粗标红处理
           question: highlightKeywords(item.question),
           answer: highlightKeywords(item.answer),
@@ -71,7 +69,6 @@ function App() {
           answer: highlightKeywords(item.answer),
         }));
         setHighlightedData(highlightedData);
-        setData(res.data);
       })
       .catch((err) => console.error(err.message))
       .finally(() => setTimeout(() => setFetching(false), 5000));
