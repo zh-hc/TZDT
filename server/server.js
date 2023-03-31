@@ -28,11 +28,17 @@ app.get('/search', (req, res) => {
       console.error(err.message);
       res.status(500).send('Internal Server Error');
     } else {
+      // 修改题目中的空格为下划线
+      rows = rows.map((item) => {
+        return {
+          ...item,
+          question: item.question.replace(/\s/g, '_'),
+        };
+      });
       res.json(rows);
     }
   });
 });
-
 
 app.get('/random', (req, res) => {
   const sql = 'SELECT * FROM TZDT ORDER BY RANDOM() LIMIT 10';
@@ -41,10 +47,18 @@ app.get('/random', (req, res) => {
       console.error(err.message);
       res.status(500).send('Internal Server Error');
     } else {
+      // 修改题目中的空格为下划线
+      rows = rows.map((item) => {
+        return {
+          ...item,
+          question: item.question.replace(/\s/g, '_'),
+        };
+      });
       res.json(rows);
     }
   });
 });
+
 
 
 app.listen(3001, () => {

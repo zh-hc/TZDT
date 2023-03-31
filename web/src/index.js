@@ -103,7 +103,7 @@ function App() {
               title={
                 <div style={{ display: 'flex', alignItems: 'start', flexWrap: 'wrap' }}>
                   <div style={{ fontWeight: 'bold', flexShrink: 0, marginRight: '8px' }}>题目：</div>
-                  <div style={{ flex: 1, minWidth: 0 }} dangerouslySetInnerHTML={{ __html: item.question.split('|')[0].replace(/\s/g, '_') }} />
+                  <div style={{ flex: 1, minWidth: 0 }} dangerouslySetInnerHTML={{ __html: item.question.split('|')[0] }} />
                 </div>
               }
               description={
