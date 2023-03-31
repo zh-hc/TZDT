@@ -113,7 +113,7 @@ function App() {
                     <div style={{ color: 'blue', flex: 1 }}>
                       <div style={{ marginLeft: '16px', marginBottom: '8px' }}>
                         {item.question.split('|').slice(1).map((option, index) => (
-                          <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '4px', minWidth: 0 }}>
+                          <div key={index} style={{ display: 'flex', alignItems: 'start', marginBottom: '4px', minWidth: 0 }}>
                             <div style={{ width: '20px', textAlign: 'center', flexShrink: 0 }}>{`${String.fromCharCode(65 + index)}.`}</div>
                             <div style={{ flex: 1, minWidth: 0 }} dangerouslySetInnerHTML={{ __html: option }} />
                           </div>
