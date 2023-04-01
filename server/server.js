@@ -28,11 +28,14 @@ app.get('/search', (req, res) => {
       console.error(err.message);
       res.status(500).send('Internal Server Error');
     } else {
-      // 修改题目中的空格为下划线
       rows = rows.map((item) => {
+        const firstPipeIndex = item.question.indexOf('|');
+        const questionBeforePipe = item.question.substring(0, firstPipeIndex);
+        const questionAfterPipe = item.question.substring(firstPipeIndex);
+        const questionBeforePipeWithUnderscores = questionBeforePipe.replace(/\s/g, '_');
         return {
           ...item,
-          question: item.question.replace(/\s/g, '_'),
+          question: questionBeforePipeWithUnderscores + questionAfterPipe,
         };
       });
       res.json(rows);
@@ -47,11 +50,14 @@ app.get('/random', (req, res) => {
       console.error(err.message);
       res.status(500).send('Internal Server Error');
     } else {
-      // 修改题目中的空格为下划线
       rows = rows.map((item) => {
+        const firstPipeIndex = item.question.indexOf('|');
+        const questionBeforePipe = item.question.substring(0, firstPipeIndex);
+        const questionAfterPipe = item.question.substring(firstPipeIndex);
+        const questionBeforePipeWithUnderscores = questionBeforePipe.replace(/\s/g, '_');
         return {
           ...item,
-          question: item.question.replace(/\s/g, '_'),
+          question: questionBeforePipeWithUnderscores + questionAfterPipe,
         };
       });
       res.json(rows);
